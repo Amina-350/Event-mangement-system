@@ -1,5 +1,6 @@
 const express = require("express");
-const { connectDB } = require("./utility/dbConnection");
+// const { connectDB } = require("./utility/dbConnection");
+const {connectDB}=require('./utility/dbMySqlConnection')
 const userRouter = require("./Routes/userRoute");
 
 const app = express();
