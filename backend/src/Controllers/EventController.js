@@ -14,6 +14,7 @@ exports.createEventController = async (req, res) => {
     if (!user) {
       return res.status(404).json({ message: "User not found" })
     }
+    console.log("the role is ------>",user.role)
 
     if (user.role !== "vendor") {
       return res.status(403).json({ message: "Only vendors can create events" })

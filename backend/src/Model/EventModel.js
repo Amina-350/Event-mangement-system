@@ -5,11 +5,9 @@ const eventSchema = new mongoose.Schema(
   {
     title: {
       type: String,
-      
     },
     description: {
-      type: String,
-     
+      type: String, 
     },
     category: {
       type: String,
