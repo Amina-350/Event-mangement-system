@@ -8,7 +8,7 @@ exports.register = async (req, res) => {
   try {
     const {
       name, email, password,
-      gender, type, phone, address, city, country
+      gender, role, phone, address, city, country
     } = req.body;
 
     // password match check
@@ -31,7 +31,7 @@ exports.register = async (req, res) => {
       email,
       password: hashedPassword,
       gender,
-      type,
+      role,
       phone,
       address,
       city,
@@ -69,7 +69,7 @@ exports.login = async (req, res) => {
     const token = jwt.sign(
       { userId: user._id, email: user.email, type: user.type },
       JWT_SECRET,
-      { expiresIn: "1h" }
+      { expiresIn: "20h" }
     );
 
     res.json({

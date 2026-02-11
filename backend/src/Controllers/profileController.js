@@ -1,92 +1,218 @@
-const Profile = require("../Model/ProfileModel");
 const { uploadToCloudinary } = require("../utility/cloudinary");
+const User = require("../Model/UserModel");
+// Import all models
+const PersonalIdentityModel = require("../Model/ProfileModels/PersonalIdentityModel");
+const ProfileSocialModel = require("../Model/ProfileModels/SocialLink");
+const PrivacyModel = require("../Model/ProfileModels/PrivacyModel");
+const ProfileAddressModel = require("../Model/ProfileModels/ProfileAddressModel");
+const RoleProfessionalInfoModel = require("../Model/ProfileModels/RoleAndProfessionalInfoModel");
+const EventProfileModel = require("../Model/ProfileModels/EventProfileModel");
+const UserPreferenceModel = require("../Model/ProfileModels/UserPreferenceModel");
+const AuditModel = require("../Model/ProfileModels/AuditModel");
+const ContactInformationModel = require("../Model/ProfileModels/ContactInformationModel");
+const VerficationTrustModel = require("../Model/ProfileModels/VerficationTrustModel");
 
 const createProfile = async (req, res) => {
   try {
-    console.log("the req is --->",req);
     const userId = req.user._id;
+    console.log("the id is ---->", userId);
 
     // Handle uploaded files
     let profileImageUrl = "";
     let coverImageUrl = "";
-
     if (req.files) {
       if (req.files.profileImage) {
-        profileImageUrl = await uploadToCloudinary(req.files.profileImage[0].path, "profiles");
+        profileImageUrl = await uploadToCloudinary(
+          req.files.profileImage[0].path,
+          "profiles",
+        );
       }
       if (req.files.coverImage) {
-        coverImageUrl = await uploadToCloudinary(req.files.coverImage[0].path, "profiles");
+        coverImageUrl = await uploadToCloudinary(
+          req.files.coverImage[0].path,
+          "profiles",
+        );
       }
     }
 
-    const profileData = {
+
+    const{
+   
+      firstName,
+      middleName,
+      lastName,
+      displayName,
+      username,
+      bio,
+      tagline,
+      profileImage,
+      coverImage,
+      gender,
+      dateOfBirth,
+      nationality,
+      languagesSpoken,
+      age,
+      socialLinks,
+        profileVisibility,
+      searchable,
+      allowMessages,
+          address,
+      location,
+
+ role,
+      organizationName,
+      organizationType,
+      designation,
+      aboutOrganization,
+      companyWebsite,
+      experienceYears,
+      skills,
+      certifications,
+        eventExpertise,
+      preferredEventTypes,
+      preferredAudienceSize,
+      availabilityStatus,
+      favoriteVenues,
+      
+        interests,
+      notificationPreferences,
+      languagePreference,
+      currencyPreference,
+
+         email,
+      phone,
+      alternatePhone,
+      contactVisibility,
+
+        
+    emailVerified,
+    phoneVerified,
+    profileVerified,
+    verificationBadge,
+  
+    }=req.body;
+    // Prepare data for each model
+    const personalIdentityData = {
       userId,
-      firstName: req.body.firstName,
-      middleName: req.body.middleName,
-      lastName: req.body.lastName,
-      displayName: req.body.displayName,
-      username: req.body.username,
-      bio: req.body.bio,
-      tagline: req.body.tagline,
-      profileImage: profileImageUrl || req.body.profileImage, // fallback to url if sent as text
-      coverImage: coverImageUrl || req.body.coverImage,
-      gender: req.body.gender,
-      dateOfBirth: req.body.dateOfBirth,
-      nationality: req.body.nationality,
-      languagesSpoken: req.body.languagesSpoken,
-      email: req.body.email,
-      phone: req.body.phone,
-      alternatePhone: req.body.alternatePhone,
-      contactVisibility: req.body.contactVisibility,
-      address: req.body.address,
-      location: req.body.location,
-      socialLinks: req.body.socialLinks,
-      role: req.body.role,
-      organizationName: req.body.organizationName,
-      organizationType: req.body.organizationType,
-      designation: req.body.designation,
-      aboutOrganization: req.body.aboutOrganization,
-      companyWebsite: req.body.companyWebsite,
-      experienceYears: req.body.experienceYears,
-      skills: req.body.skills,
-      certifications: req.body.certifications,
-      eventExpertise: req.body.eventExpertise,
-      preferredEventTypes: req.body.preferredEventTypes,
-      preferredAudienceSize: req.body.preferredAudienceSize,
-      availabilityStatus: req.body.availabilityStatus,
-      interests: req.body.interests,
-      favoriteVenues: req.body.favoriteVenues,
-      notificationPreferences: req.body.notificationPreferences,
-      languagePreference: req.body.languagePreference,
-      currencyPreference: req.body.currencyPreference,
-      profileVisibility: req.body.profileVisibility,
-      searchable: req.body.searchable,
-      allowMessages: req.body.allowMessages,
+      firstName,
+      middleName,
+      lastName,
+      displayName,
+      username,
+      bio,
+      tagline,
+      profileImage,
+      coverImage,
+      gender,
+      dateOfBirth,
+      nationality,
+      languagesSpoken,
+      age:dateOfBirth
+        ? Math.floor(
+            (Date.now() - new Date(req.body.dateOfBirth).getTime()) /
+              (1000 * 60 * 60 * 24 * 365.25),
+          )
+        : null,
     };
 
-    // Auto-calculate age
-    if (req.body.dateOfBirth) {
-      const ageDifMs = Date.now() - new Date(req.body.dateOfBirth).getTime();
-      profileData.age = Math.floor(ageDifMs / (1000 * 60 * 60 * 24 * 365.25));
-    }
+    const socialData = {
+      userId,
+      socialLinks,
+    };
 
-    // Check if profile already exists
-    const existingProfile = await Profile.findOne({ userId });
-    if (existingProfile) return res.status(400).json({ message: "Profile already exists." });
+    const privacyData = {
+      userId,
+      profileVisibility,
+      searchable,
+      allowMessages,
+    };
 
-    // Check username
-    const existingUsername = await Profile.findOne({ username: profileData.username });
-    if (existingUsername) return res.status(400).json({ message: "Username already taken." });
+    const addressData = {
+      userId,
+      address,
+      location,
+    };
 
-    // Save profile
-    const profile = new Profile(profileData);
-    await profile.save();
+    const roleInfoData = {
+      userId,
+      role,
+      organizationName,
+      organizationType,
+      designation,
+      aboutOrganization,
+      companyWebsite,
+      experienceYears,
+      skills,
+      certifications,
+    };
 
-    res.status(201).json({ message: "Profile created successfully", profile });
+    const eventProfileData = {
+      userId,
+      eventExpertise,
+      preferredEventTypes,
+      preferredAudienceSize,
+      availabilityStatus,
+      favoriteVenues,
+    };
+
+    const preferencesData = {
+      userId,
+      interests,
+      notificationPreferences,
+      languagePreference,
+      currencyPreference,
+    };
+
+    const auditData = {
+      userId,
+      isProfileComplete: false,
+      isPublicProfile: true,
+    };
+    const contactData = {
+      userId,
+      email,
+      phone,
+      alternatePhone,
+      contactVisibility,
+    };
+   const trustData = {
+  userId,
+
+    emailVerified,
+    phoneVerified,
+    profileVerified,
+    verificationBadge,
+  
+};
+
+
+    // Check if profile already exists (username check)
+    const existingProfile = await User.findOne({ userId });
+    if (existingProfile)
+      return res.status(400).json({ message: "Profile already exists." });
+
+    // const existingUsername = await User.findOne({ username: personalIdentityData.username });
+    // if (existingUsername) return res.status(400).json({ message: "Username already taken." });
+
+    // Save all models in parallel
+    await Promise.all([
+      PersonalIdentityModel.create(personalIdentityData),
+      ProfileSocialModel.create(socialData),
+      PrivacyModel.create(privacyData),
+      ProfileAddressModel.create(addressData),
+      RoleProfessionalInfoModel.create(roleInfoData),
+      EventProfileModel.create(eventProfileData),
+      UserPreferenceModel.create(preferencesData),
+      AuditModel.create(auditData),
+      ContactInformationModel.create(contactData),
+      VerficationTrustModel.create(trustData),
+    ]);
+
+    res.status(201).json({ message: "Full profile created successfully" });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Server error", error: error.message });
   }
 };
 
-module.exports = { createProfile };
+module.exports = { createProfile: createProfile };

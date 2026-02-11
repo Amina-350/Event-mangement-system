@@ -3,20 +3,20 @@ import { Link } from 'react-router-dom';
 import './style.css';
 import api from '../api/axios';
 import { useNavigate } from 'react-router-dom'; // ✅ import navigate
-const Registeration = () => {
+const CreateEventForm = () => {
   const navigate = useNavigate(); 
 
   const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    password: "",
-    confirmPassword: "",
-    gender: "",
-    role: "",
-    phone: "",
-    address: "",
-    city: "",
-    country: ""
+    title: "",
+    description: "",
+    category: "",
+    Eventtype: "",
+    date: "",
+    time: "",
+    location: "",
+    audienceSize: "",
+    createdBy: "",
+    
   });
 
   const [loading, setLoading] = useState(false);
@@ -49,7 +49,7 @@ const Registeration = () => {
         email: formData.email,
         password: formData.password,
         gender: formData.gender,
-        role: formData.role,
+        type: formData.type,
         phone: formData.phone,
         address: formData.address,
         city: formData.city,
@@ -88,7 +88,7 @@ const Registeration = () => {
           <option value="other">Other</option>
         </select>
 
-  <select name="role" onChange={handleChange}>
+  <select name="type" onChange={handleChange}>
           <option value="">Select type</option>
           <option value="male">User</option>
           <option value="female">Vendor</option>
@@ -110,4 +110,4 @@ const Registeration = () => {
   );
 };
 
-export default Registeration;
+export default CreateEventForm;

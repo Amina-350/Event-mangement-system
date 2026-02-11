@@ -12,4 +12,5 @@ router.post(
   ]),
   createProfile
 );
+
 module.exports = router;
