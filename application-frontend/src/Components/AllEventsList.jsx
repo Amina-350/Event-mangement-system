@@ -10,7 +10,7 @@ import {
   CardImg
 } from "reactstrap";
 import { useNavigate } from "react-router-dom";
-
+import { Link } from "react-router-dom";
 export default function AllEventsList() {
   const [event, setevent] = useState([]);
   const [page, setPage] = useState(1);
@@ -51,7 +51,13 @@ export default function AllEventsList() {
   return (
     <div className="container-fluid mt-4">
       <h1 className="mb-4 text-center">All Events List</h1>
-
+  <Link
+  
+            to={'/MyClender'}
+            style={{ color: "red", fontWeight: "bold" }}
+          >
+          <p className="mb-4 text-center">Show My Meetings</p> 
+          </Link>
       <div className="row">
         {event.map((event, index) => (
           <div
