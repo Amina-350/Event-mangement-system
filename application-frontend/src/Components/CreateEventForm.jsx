@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import api from "../api/axios";
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 import "./style.css";
 
 const CreateEventForm = () => {
-  const navigate = useNavigate();
+
 
   const [formData, setFormData] = useState({
     title: "",
@@ -86,7 +86,7 @@ const token = localStorage.getItem("token");
       },
     });
 
-    setSuccess("Event Created Successfully");
+    setSuccess("Event Created Successfully",res);
     // navigate("/dashboard");
 
   } catch (err) {

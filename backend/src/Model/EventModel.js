@@ -1,8 +1,12 @@
 const mongoose = require("mongoose");
-
 // Event Schema
 const eventSchema = new mongoose.Schema(
   {
+      userId: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "User",
+            required: true,
+          },
     title: {
       type: String,
     },
@@ -11,20 +15,16 @@ const eventSchema = new mongoose.Schema(
     },
     category: {
       type: String,
-
     },
     Eventtype: { 
       type: String,
       enum: ["online", "physical", "hybrid"],
-     
     },
     date: {
       type: Date,
-
     },
     time: {
       type: String,
-    
     },
     location: {
       address: String,

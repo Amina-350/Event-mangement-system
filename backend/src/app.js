@@ -5,6 +5,7 @@ const { connectDB } = require("./utility/dbConnection");
 const userRouter = require("./Routes/userRoute");
 const ProfileRouter = require("./Routes/profileRoute");
 const EventRoute=require('./Routes/EventRoute');
+const BookMeetingRoute=require('./Routes/BookMeetingRoute')
 const cors = require("cors");
 
 
@@ -22,5 +23,5 @@ connectDB();
 app.use("/api/user", userRouter);
 app.use("/api/Profile", ProfileRouter);
 app.use('/api/Event',EventRoute)
-
+app.use('/api/Meeting',BookMeetingRoute);
 module.exports = app;

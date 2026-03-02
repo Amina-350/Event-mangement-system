@@ -37,7 +37,7 @@ const Login = () => {
       });
 
       setSuccess("Login successful 🎉");
-      navigate("/profile");
+      navigate("/HomePage");
       console.log("Login Response:", res.data);
 
       // Optional: store token in localStorage if backend sends JWT

@@ -87,3 +87,35 @@ exports.login = async (req, res) => {
     res.status(500).json({ message: "Server error" });
   }
 };
+exports.getalluser=async(req,res)=>{
+  try{
+    
+    const Alluser=await User.find();
+    res.status(200).json(Alluser)
+
+  }
+  catch(error){
+  res.status(500).json({
+      success: false,
+      message: "Server error",
+      error: error.message,
+  })
+
+  }
+
+}
+exports.getsingleuser=async(req,res)=>{
+  try{
+const {id}=req.params;
+const singleuser=await User.findById(id);
+res.status(200).json(singleuser)
+  }
+  catch(error){
+    res.status(500).json({
+      message:"server error",
+      error:error.message,
+    })
+
+  }
+
+}

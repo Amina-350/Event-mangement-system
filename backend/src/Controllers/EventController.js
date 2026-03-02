@@ -1,7 +1,7 @@
 const Event = require("../Model/EventModel")
 const User = require("../Model/UserModel")
 const { uploadToCloudinary } = require("../utility/cloudinary")
-
+const mongoose = require("mongoose");
 
 exports.createEventController = async (req, res) => {
     console.log("the id isss====>")
@@ -28,6 +28,7 @@ exports.createEventController = async (req, res) => {
     }
 
     const {
+    
       title,
       description,
       category,
@@ -47,6 +48,7 @@ exports.createEventController = async (req, res) => {
     } = req.body
 
     const event = new Event({
+        userId,
       title,
       description,
       category,
@@ -79,4 +81,69 @@ exports.createEventController = async (req, res) => {
       error: error.message
     })
   }
-}
+},
+
+exports.getallevents = async (req, res) => {
+  try {
+    // Get page & limit from query
+    const page = Math.max(parseInt(req.query.page) || 1, 1);
+    const limit = Math.max(parseInt(req.query.limit) || 10, 1);
+
+    const skip = (page - 1) * limit;
+
+    const totalEvents = await Event.countDocuments();
+
+    const events = await Event.find()
+      .skip(skip)
+      .limit(limit)
+      .sort({ createdAt:1 });
+
+    res.status(200).json({
+      page,
+      totalPages: Math.ceil(totalEvents / limit),
+      totalEvents,
+      events,
+    });
+
+  } catch (error) {
+    res.status(500).json({
+      message: "error",
+      error: error.message,
+    });
+  }
+};
+exports.getsingleevent = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    // ✅ Check if ID is valid
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid Event ID",
+      });
+    }
+
+    const singleEvent = await Event.findById(id);
+
+    // ✅ Check if event exists
+    if (!singleEvent) {
+      return res.status(404).json({
+        success: false,
+        message: "Event not found",
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      data:singleEvent,
+    });
+
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Server error",
+      error: error.message,
+    });
+  }
+};
