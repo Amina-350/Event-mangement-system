@@ -26,5 +26,10 @@ const MeetingBookingSchema = new mongoose.Schema({
   location: {
     type: String,
   },
+  status:{
+      type: String,
+    enum:["start","pending","on-going","Finish","draft"],
+    default:"start"
+  }
 });
 module.exports = mongoose.model("MeetingBookingSchema", MeetingBookingSchema);

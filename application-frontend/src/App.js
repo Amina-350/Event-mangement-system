@@ -11,6 +11,9 @@ import DetailEventPage from "./Components/DetailEventPage";
 import BookMeetingForm from "./Components/BookMeetingForm";
 import MyClender from "./Components/MyClender";
 import VendorDetailPage from "./Components/VendorDetailPage";
+import MeetingDetailPage from "./Components/MeetingDetailPage";
+import AllMeetingList from "./Components/AllMeetingList";
+
 function App() {
   return (
     <div className="App">
@@ -26,6 +29,8 @@ function App() {
           <Route path="/vendordetailpage/:id" element={<VendorDetailPage />} />
         <Route path="/BookMeetingForm/:EventId/:UserId" element={<BookMeetingForm />} />
          <Route path="/MyClender" element={<MyClender />} />
+           <Route path="/MeetingDetailPage/:id" element={<MeetingDetailPage/>} />
+                <Route path="/AllMeetingList" element={<AllMeetingList/>} />
       </Routes>
     </div>
   );

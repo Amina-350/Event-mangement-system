@@ -5,20 +5,21 @@ import "react-datepicker/dist/react-datepicker.css";
 import api from "../api/axios";
 
 const BookMeetingForm = () => {
-  const { UserId, EventId } = useParams();
+  const { EventId } = useParams();
 
   const [eventData, setEventData] = useState(null);
 
   const [formData, setFormData] = useState({
-    UserId,
     EventId,
     Date: null,
     Time: null,
     Venue: "",
     location: "",
-    OnlineMeetingLink: ""
+    OnlineMeetingLink: "",
+    status: "start", // default status
   });
 
+  // Fetch Event Details
   useEffect(() => {
     const fetchEvent = async () => {
       try {
@@ -27,7 +28,7 @@ const BookMeetingForm = () => {
         const res = await api.get(
           `/Event/GetSingleEvent/${EventId}`,
           {
-            headers: { Authorization: `Bearer ${token}` }
+            headers: { Authorization: `Bearer ${token}` },
           }
         );
 
@@ -40,6 +41,7 @@ const BookMeetingForm = () => {
     fetchEvent();
   }, [EventId]);
 
+  // Handle Venue Change
   const handleVenueChange = (e) => {
     const value = e.target.value;
 
@@ -48,18 +50,19 @@ const BookMeetingForm = () => {
         ...formData,
         Venue: value,
         location: eventData.location?.address || "",
-        OnlineMeetingLink: ""
+        OnlineMeetingLink: "",
       });
     } else if (value === "online") {
       setFormData({
         ...formData,
         Venue: value,
         location: "",
-        OnlineMeetingLink: ""
+        OnlineMeetingLink: "",
       });
     }
   };
 
+  // Handle Submit
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -74,21 +77,33 @@ const BookMeetingForm = () => {
         Time: formData.Time
           ? formData.Time.toLocaleTimeString("en-US", {
               hour: "2-digit",
-              minute: "2-digit"
+              minute: "2-digit",
             })
-          : ""
+          : "",
       };
 
       const response = await api.post(
         "/Meeting/BookMeeting",
         payload,
         {
-          headers: { Authorization: `Bearer ${token}` }
+          headers: { Authorization: `Bearer ${token}` },
         }
       );
 
       alert("Meeting Booked Successfully!");
       console.log(response.data);
+
+      // Reset form
+      setFormData({
+        EventId,
+        Date: null,
+        Time: null,
+        Venue: "",
+        location: "",
+        OnlineMeetingLink: "",
+        status: "start",
+      });
+
     } catch (error) {
       console.error(error);
       alert("Error booking meeting");
@@ -100,6 +115,8 @@ const BookMeetingForm = () => {
       <h2>Book Meeting</h2>
 
       <form onSubmit={handleSubmit} style={styles.form}>
+<label className="meeting-label">Select Meeting Date</label>
+        {/* Date */}
         <DatePicker
           selected={formData.Date}
           onChange={(date) =>
@@ -110,7 +127,8 @@ const BookMeetingForm = () => {
           minDate={new Date()}
           className="input"
         />
-
+<label className="meeting-label">Select Meeting Time</label>
+        {/* Time */}
         <DatePicker
           selected={formData.Time}
           onChange={(time) =>
@@ -124,7 +142,8 @@ const BookMeetingForm = () => {
           placeholderText="Select time"
           className="input"
         />
-
+<label  className="meeting-label">Meeting Venue </label>
+        {/* Venue */}
         <select
           name="Venue"
           value={formData.Venue}
@@ -137,16 +156,16 @@ const BookMeetingForm = () => {
           <option value="onsite">Onsite</option>
         </select>
 
+        {/* Online Link */}
         {formData.Venue === "online" && (
           <input
             type="text"
-            name="OnlineMeetingLink"
             placeholder="Enter Online Meeting Link"
             value={formData.OnlineMeetingLink}
             onChange={(e) =>
               setFormData({
                 ...formData,
-                OnlineMeetingLink: e.target.value
+                OnlineMeetingLink: e.target.value,
               })
             }
             required
@@ -154,15 +173,32 @@ const BookMeetingForm = () => {
           />
         )}
 
+        {/* Location */}
         {formData.Venue === "onsite" && (
           <input
             type="text"
-            name="location"
             value={formData.location}
             readOnly
             style={styles.input}
           />
         )}
+
+<label  className="meeting-label">Meeting Status</label>
+        {/* Status Dropdown */}
+        <select
+          name="status"
+          value={formData.status}
+          onChange={(e) =>
+            setFormData({ ...formData, status: e.target.value })
+          }
+          style={styles.input}
+        >
+          <option value="start">Start</option>
+          <option value="pending">Pending</option>
+          <option value="on-going">On Going</option>
+          <option value="finish">Finish</option>
+          <option value="draft">Draft</option>
+        </select>
 
         <button type="submit" style={styles.button}>
           Book Meeting
@@ -179,16 +215,17 @@ const styles = {
     padding: "20px",
     border: "1px solid #ccc",
     borderRadius: "8px",
-    textAlign: "center"
+    textAlign: "center",
   },
   form: {
     display: "flex",
-    flexDirection: "column"
+    flexDirection: "column",
+
   },
   input: {
     margin: "10px 0",
     padding: "10px",
-    fontSize: "16px"
+    fontSize: "16px",
   },
   button: {
     padding: "10px",
@@ -196,8 +233,10 @@ const styles = {
     backgroundColor: "#007bff",
     color: "#fff",
     border: "none",
-    cursor: "pointer"
-  }
+    cursor: "pointer",
+  },
+
+ 
 };
 
 export default BookMeetingForm;
