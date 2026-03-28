@@ -50,14 +50,32 @@ export default function AllEventsList() {
 
   return (
     <div className="container-fluid mt-4">
-      <h1 className="mb-4 text-center">All Events List</h1>
-  <Link
+    
+<div className="sublinks" style={{display:"flex",justifyContent:"space-around"}}>
+    <Link
+  
+            to={'/CreateEvent'}
+            style={{ color: "red", fontWeight: "bold" }}
+          >
+          <p className="mb-4 text-center">Create Event</p> 
+          </Link>
+              <Link
   
             to={'/MyClender'}
             style={{ color: "red", fontWeight: "bold" }}
           >
           <p className="mb-4 text-center">Show My Meetings</p> 
           </Link>
+              <Link
+  
+            to={'/profile'}
+            style={{ color: "red", fontWeight: "bold" }}
+          >
+          <p className="mb-4 text-center">Create Profile</p> 
+          </Link>
+</div>
+
+      <h1 className="mb-4 text-center">All Events List</h1> 
       <div className="row">
         {event.map((event, index) => (
           <div
