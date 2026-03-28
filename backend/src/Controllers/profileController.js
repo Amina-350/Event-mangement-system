@@ -11,7 +11,7 @@ const UserPreferenceModel = require("../Model/ProfileModels/UserPreferenceModel"
 const AuditModel = require("../Model/ProfileModels/AuditModel");
 const ContactInformationModel = require("../Model/ProfileModels/ContactInformationModel");
 const VerficationTrustModel = require("../Model/ProfileModels/VerficationTrustModel");
-
+const UserPreferenceTagModel = require("../Model/ProfileModels/UserPreferencesTagModel");
 const createProfile = async (req, res) => {
   try {
     const userId = req.user._id;
@@ -35,9 +35,7 @@ const createProfile = async (req, res) => {
       }
     }
 
-
-    const{
-   
+    const {
       firstName,
       middleName,
       lastName,
@@ -53,13 +51,13 @@ const createProfile = async (req, res) => {
       languagesSpoken,
       age,
       socialLinks,
-        profileVisibility,
+      profileVisibility,
       searchable,
       allowMessages,
-          address,
+      address,
       location,
 
- role,
+      role,
       organizationName,
       organizationType,
       designation,
@@ -68,29 +66,32 @@ const createProfile = async (req, res) => {
       experienceYears,
       skills,
       certifications,
-        eventExpertise,
+      eventExpertise,
       preferredEventTypes,
       preferredAudienceSize,
       availabilityStatus,
       favoriteVenues,
-      
-        interests,
+
+      interests,
       notificationPreferences,
       languagePreference,
       currencyPreference,
 
-         email,
+      email,
       phone,
       alternatePhone,
       contactVisibility,
-
-        
-    emailVerified,
-    phoneVerified,
-    profileVerified,
-    verificationBadge,
-  
-    }=req.body;
+      emailVerified,
+      phoneVerified,
+      profileVerified,
+      verificationBadge,
+      corporateEvents,
+      socialAndPersonalEvents,
+      educationalEvents,
+      culturalAndEntertainment,
+      sportsEvents,
+      brandEvents,
+    } = req.body;
     // Prepare data for each model
     const personalIdentityData = {
       userId,
@@ -107,19 +108,17 @@ const createProfile = async (req, res) => {
       dateOfBirth,
       nationality,
       languagesSpoken,
-      age:dateOfBirth
+      age: dateOfBirth
         ? Math.floor(
             (Date.now() - new Date(req.body.dateOfBirth).getTime()) /
               (1000 * 60 * 60 * 24 * 365.25),
           )
         : null,
     };
-
     const socialData = {
-      userId,
       socialLinks,
+      userId,
     };
-
     const privacyData = {
       userId,
       profileVisibility,
@@ -175,16 +174,26 @@ const createProfile = async (req, res) => {
       alternatePhone,
       contactVisibility,
     };
-   const trustData = {
-  userId,
+    const trustData = {
+      userId,
+      emailVerified,
+      phoneVerified,
+      profileVerified,
+      verificationBadge,
+    };
 
-    emailVerified,
-    phoneVerified,
-    profileVerified,
-    verificationBadge,
-  
-};
-
+    // Prepare event preferences (tags)
+    const eventPreferencesData = {
+      userId,
+      eventPreferences: {
+        corporateEvents,
+        socialAndPersonalEvents,
+        educationalEvents,
+        culturalAndEntertainment,
+        sportsEvents,
+        brandEvents,
+      },
+    };
 
     // Check if profile already exists (username check)
     const existingProfile = await User.findOne({ userId });
@@ -194,7 +203,7 @@ const createProfile = async (req, res) => {
     // const existingUsername = await User.findOne({ username: personalIdentityData.username });
     // if (existingUsername) return res.status(400).json({ message: "Username already taken." });
 
-    // Save all models in parallel
+    // Save all models in parallels
     await Promise.all([
       PersonalIdentityModel.create(personalIdentityData),
       ProfileSocialModel.create(socialData),
@@ -206,11 +215,12 @@ const createProfile = async (req, res) => {
       AuditModel.create(auditData),
       ContactInformationModel.create(contactData),
       VerficationTrustModel.create(trustData),
+      UserPreferenceTagModel.create(eventPreferencesData),
     ]);
 
     res.status(201).json({ message: "Full profile created successfully" });
   } catch (error) {
-    console.error(error);
+    // console.error(error);
     res.status(500).json({ message: "Server error", error: error.message });
   }
 };

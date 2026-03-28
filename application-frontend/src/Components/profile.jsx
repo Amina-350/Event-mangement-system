@@ -84,6 +84,13 @@ const initialState = {
   profileVisibility: "public",
   searchable: true,
   allowMessages: true,
+  
+  corporateEvents: false,
+socialAndPersonalEvents: false,
+educationalEvents: false,
+culturalAndEntertainment: false,
+sportsEvents: false,
+brandEvents: false,
 };
 
 /* =======================
@@ -125,16 +132,12 @@ const ProfileForm = () => {
      SUBMIT
   ======================= */
   const handleSubmit = async (e) => {
+    console.log("jjejkjkej")
     e.preventDefault();
     setError("");
     setSuccess("");
 
-    // Frontend enum validation
-    if (!formData.role) return setError("Role is required");
-    if (!formData.organizationType) return setError("Organization Type is required");
-    if (!formData.eventExpertise.length) return setError("Select at least one event expertise");
-    if (!formData.preferredEventTypes.length) return setError("Select preferred event types");
-
+    
     try {
       setLoading(true);
       const fd = new FormData();
@@ -155,12 +158,15 @@ const ProfileForm = () => {
       if (formData.coverImage) fd.append("coverImage", formData.coverImage);
 
       const token = localStorage.getItem("token");
+      console.log("the token is ",token)
 
-      await api.post("/Profile/createProfile", fd, {
+    const res=  await api.post("/Profile/createProfile", fd, {
         headers: { Authorization: `Bearer ${token}`, "Content-Type": "multipart/form-data" },
       });
+      console.log("the rs from profile is-->",res)
 
       setSuccess("Profile created successfully 🎉");
+      return res;
     } catch (err) {
       setError(err.response?.data?.message || "Something went wrong");
     } finally {
@@ -311,6 +317,74 @@ const ProfileForm = () => {
             </label>
             <input name="languagePreference" placeholder="Language Preference" value={formData.languagePreference} onChange={handleChange} />
             <input name="currencyPreference" placeholder="Currency Preference" value={formData.currencyPreference} onChange={handleChange} />
+       
+       
+       
+       <h4>Event Preferences</h4>
+
+<div className="checkbox-group">
+
+  <label>
+    <input
+      type="checkbox"
+      name="corporateEvents"
+      checked={formData.corporateEvents}
+      onChange={handleChange}
+    />
+    Corporate Events
+  </label>
+
+  <label>
+    <input
+      type="checkbox"
+      name="socialAndPersonalEvents"
+      checked={formData.socialAndPersonalEvents}
+      onChange={handleChange}
+    />
+    Social & Personal Events
+  </label>
+
+  <label>
+    <input
+      type="checkbox"
+      name="educationalEvents"
+      checked={formData.educationalEvents}
+      onChange={handleChange}
+    />
+    Educational Events
+  </label>
+
+  <label>
+    <input
+      type="checkbox"
+      name="culturalAndEntertainment"
+      checked={formData.culturalAndEntertainment}
+      onChange={handleChange}
+    />
+    Cultural & Entertainment
+  </label>
+
+  <label>
+    <input
+      type="checkbox"
+      name="sportsEvents"
+      checked={formData.sportsEvents}
+      onChange={handleChange}
+    />
+    Sports Events
+  </label>
+
+  <label>
+    <input
+      type="checkbox"
+      name="brandEvents"
+      checked={formData.brandEvents}
+      onChange={handleChange}
+    />
+    Brand Events
+  </label>
+
+</div>
           </>
         );
 

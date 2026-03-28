@@ -31,6 +31,7 @@ const DetailEventPage = () => {
     return <p>Loading...</p>;
   }
 
+  console.log("the event detail is -->",eventDetail)
   return (
     <div className="event-container">
       <div className="banner">

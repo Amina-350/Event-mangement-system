@@ -2,19 +2,17 @@ const Event = require("../Model/EventModel")
 const User = require("../Model/UserModel")
 const { uploadToCloudinary } = require("../utility/cloudinary")
 const mongoose = require("mongoose");
+const UserPreferenceTagModel=require('../Model/ProfileModels/UserPreferencesTagModel')
 
 exports.createEventController = async (req, res) => {
-    console.log("the id isss====>")
+   
   try {
     const userId = req.user._id
-    console.log("the id isss====>",userId)
-
     const user = await User.findById(userId)
-    console.log("the id isss====>",user)
+    
     if (!user) {
       return res.status(404).json({ message: "User not found" })
     }
-    console.log("the role is ------>",user.role)
 
     if (user.role !== "vendor") {
       return res.status(403).json({ message: "Only vendors can create events" })
@@ -42,7 +40,8 @@ exports.createEventController = async (req, res) => {
       price,
       contactEmail,
       contactPhone,
-      tags,
+      
+      preferEvent,
       startDateTime,
       endDateTime
     } = req.body
@@ -63,9 +62,10 @@ exports.createEventController = async (req, res) => {
       banner_image: bannerImageUrl,
       contactEmail,
       contactPhone,
-      tags,
+      
       startDateTime,
       endDateTime,
+      preferEvent,
       createdBy: userId
     })
 
@@ -84,31 +84,55 @@ exports.createEventController = async (req, res) => {
 },
 
 exports.getallevents = async (req, res) => {
-  try {
-    // Get page & limit from query
-    const page = Math.max(parseInt(req.query.page) || 1);
-    const limit = Math.max(parseInt(req.query.limit) || 10);
+ try {
+    const userId = req.user._id;
 
-    const skip = (page - 1) * limit;
+    // 1. Get user preferences
+    const userPref = await UserPreferenceTagModel.findOne({ userId });
 
-    const totalEvents = await Event.countDocuments();
+    if (!userPref) {
+      return res.status(404).json({
+        success: false,
+        message: "User preferences not found",
+      });
+    }
 
-    const events = await Event.find()
-      .skip(skip)
-      .limit(limit)
-      .sort({ createdAt:1 });
+    const prefs = userPref.eventPreferences;
 
-    res.status(200).json({
-      page,
-      totalPages: Math.ceil(totalEvents / limit),
-      totalEvents,
+    // 2. Convert TRUE preferences into array
+    let preferredTags = [];
+
+    if (prefs.corporateEvents) preferredTags.push("corporateEvents");
+    if (prefs.socialAndPersonalEvents) preferredTags.push("socialAndPersonalEvents");
+    if (prefs.educationalEvents) preferredTags.push("educationalEvents");
+    if (prefs.culturalAndEntertainment) preferredTags.push("culturalAndEntertainment");
+    if (prefs.sportsEvents) preferredTags.push("sportsEvents");
+    if (prefs.brandEvents) preferredTags.push("brandEvents");
+
+    let events;
+
+    // 3. If no preferences → return ALL events
+    if (preferredTags.length === 0) {
+      events = await Event.find({});
+    } else {
+      // 4. Filter by preferences
+      events = await Event.find({
+        preferEvent: { $in: preferredTags },
+      });
+    }
+
+
+    return res.status(200).json({
+      success: true,
+      count: events.length,
       events,
     });
 
   } catch (error) {
-    res.status(500).json({
-      message: "error",
-      error: error.message,
+    console.error(error);
+    return res.status(500).json({
+      success: false,
+      message: "Server Error",
     });
   }
 };

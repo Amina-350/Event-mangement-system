@@ -66,6 +66,21 @@ exports.getsinglemeeting = async (req, res) => {
     });
   }
 };
+exports.getallmeetings=async(req,res)=>{
+  try{
+    const Allmeetings=await MeetingBookingSchema.find();
+  res.status(200).json(Allmeetings)
+
+  }
+  catch(error){
+    res.status(500).json({
+        message: "Server Error",
+      error: error.message,
+       
+       
+    })
+  }
+}
 // ----------------- patch api------------
 exports.updateMeetingStatus = async (req, res) => {
   try {

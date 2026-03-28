@@ -90,9 +90,9 @@ const Registeration = () => {
 
   <select name="role" onChange={handleChange}>
           <option value="">Select type</option>
-          <option value="male">User</option>
-          <option value="female">Vendor</option>
-          <option value="other">admin</option>
+          <option value="user">User</option>
+          <option value="vendor">Vendor</option>
+          <option value="admin">admin</option>
         </select>
 
         <input name="phone" placeholder="Phone" onChange={handleChange} />

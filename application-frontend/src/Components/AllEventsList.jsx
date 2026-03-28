@@ -5,6 +5,7 @@ import {
   CardBody,
   CardTitle,
   CardSubtitle,
+
   CardText,
   Button,
   CardImg
@@ -22,7 +23,6 @@ export default function AllEventsList() {
     const fetchEventData = async () => {
       try {
         const token = localStorage.getItem("token");
-
         const response = await api.get("/Event/AllEvents", {
           params: {
             page: page,

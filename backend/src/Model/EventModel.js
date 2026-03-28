@@ -2,24 +2,37 @@ const mongoose = require("mongoose");
 // Event Schema
 const eventSchema = new mongoose.Schema(
   {
-      userId: {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: "User",
-            required: true,
-          },
+    userId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
     title: {
       type: String,
     },
     description: {
-      type: String, 
+      type: String,
     },
     category: {
       type: String,
     },
-    Eventtype: { 
+    Eventtype: {
       type: String,
       enum: ["online", "physical", "hybrid"],
     },
+   preferEvent: [
+  {
+    type: String,
+    enum: [
+      "corporateEvents",
+      "socialAndPersonalEvents",
+      "educationalEvents",
+      "culturalAndEntertainment",
+      "sportsEvents",
+      "brandEvents",
+    ],
+  },
+],
     date: {
       type: Date,
     },
@@ -40,38 +53,36 @@ const eventSchema = new mongoose.Schema(
       enum: ["small", "medium", "large"],
     },
 
-status: {
-  type: String,
-  enum: ["draft", "published", "cancelled", "completed"],
-  default: "draft",
-},
+    status: {
+      type: String,
+      enum: ["draft", "published", "cancelled", "completed"],
+      default: "draft",
+    },
 
-isPaid: {
-  type: Boolean,
-  default: false,
-},
-price: {
-  type: Number,
-  default: 0,
-},
-banner_image: String,
-contactEmail: String,
-contactPhone: String,
-tags: [String], //this is particularly use for the search filter 
+    isPaid: {
+      type: Boolean,
+      default: false,
+    },
+    price: {
+      type: Number,
+      default: 0,
+    },
+    banner_image: String,
+    contactEmail: String,
+    contactPhone: String,
+  
 
-startDateTime: Date,
-endDateTime: Date,
-   
+    startDateTime: Date,
+    endDateTime: Date,
+
     createdBy: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
       required: true,
-     
     },
-    
   },
-  
-  { timestamps: true }
+
+  { timestamps: true },
 );
 
 module.exports = mongoose.model("Event", eventSchema);
