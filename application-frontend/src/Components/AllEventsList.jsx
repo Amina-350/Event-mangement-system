@@ -33,8 +33,8 @@ export default function AllEventsList() {
           },
         });
 
-        setevent(response.data.events);
-        setTotalPages(response.data.totalPages);
+       setevent(response.data.data); // correct
+setTotalPages(response.data.pagination.totalPages); // correct
 
       } catch (error) {
         console.log(error);
@@ -77,7 +77,7 @@ export default function AllEventsList() {
 
       <h1 className="mb-4 text-center">All Events List</h1> 
       <div className="row">
-        {event.map((event, index) => (
+        {event?.map((event, index) => (
           <div
             onClick={() => handleClick(event._id)}
             key={event._id || index}

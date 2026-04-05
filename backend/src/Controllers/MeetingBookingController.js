@@ -1,90 +1,62 @@
 const mongoose = require("mongoose");
 const MeetingBookingSchema = require("../Model/MeetingBookingModel");
-exports.MeetingBooking = async (req, res) => {
+const { sendSuccess, sendError } = require("../utility/responseHandler");
+const MeetingBooking = async (req, res) => {
   try {
     const userId = req.user._id;
-    const { EventId, Date, Time, Venue,OnlineMeetingLink , location ,status} = req.body;
-    const NewMeeting = new MeetingBookingSchema(
-     {
+    const { EventId, Date, Time, Venue, OnlineMeetingLink, location, status } =
+      req.body;
+    const NewMeeting = new MeetingBookingSchema({
       userId,
       EventId,
       Date,
       Time,
       Venue,
-   status,
-    location: Venue === "onsite" ? location : null,
-      OnlineMeetingLink: Venue === "online" ? OnlineMeetingLink : null
-     }
-    );
+      status,
+      location: Venue === "onsite" ? location : null,
+      OnlineMeetingLink: Venue === "online" ? OnlineMeetingLink : null,
+    });
     await NewMeeting.save();
-      res.status(201).json({
-      message: "Event created successfully",
-      NewMeeting
-    })
-  } catch(error) {
-  res.json({
-    message:"server error",
-    error:error.message,
-  })
-
+    sendSuccess(res, NewMeeting);
+  } catch (error) {
+    sendError(res, error);
   }
 };
-exports.getMyMeetings = async (req, res) => {
+const getMyMeetings = async (req, res) => {
   try {
     const userId = req.user._id;
 
-    const meetings = await MeetingBookingSchema.find({ userId })
+    const meetings = await MeetingBookingSchema.find({ userId });
 
-
-    res.status(200).json({
-      success: true,
-      meetings
-    });
-
+    sendSuccess(res, meetings);
   } catch (error) {
-    res.status(500).json({
-      message: "Server Error",
-      error: error.message
-    });
+    sendError(res, error);
   }
 };
 
-exports.getsinglemeeting = async (req, res) => {
+const getsinglemeeting = async (req, res) => {
   try {
-    const {id } = req.params;
+    const { id } = req.params;
 
     const singlemeeting = await MeetingBookingSchema.findById(id);
 
-    res.status(200).json({
-      success: true,
-      singlemeeting: singlemeeting,
-    });
+    sendSuccess(res, singlemeeting);
   } catch (error) {
-    res.status(500).json({
-      message: "Server Error",
-      error: error.message,
-    });
+    sendError(res, error);
   }
 };
-exports.getallmeetings=async(req,res)=>{
-  try{
-    const Allmeetings=await MeetingBookingSchema.find();
-  res.status(200).json(Allmeetings)
-
-  }
-  catch(error){
-    res.status(500).json({
-        message: "Server Error",
-      error: error.message,
-       
-       
-    })
-  }
-}
-// ----------------- patch api------------
-exports.updateMeetingStatus = async (req, res) => {
+const getallmeetings = async (req, res) => {
   try {
-    const { id } = req.params;   // meeting id
+    const Allmeetings = await MeetingBookingSchema.find();
+    sendSuccess(res, Allmeetings);
+  } catch (error) {
+    sendError(res, error);
+  }
+};
+// ----------------- patch api------------
+const updateMeetingStatus = async (req, res) => {
+  try {
+    const { id } = req.params; // meeting id
     const { status } = req.body; // new status
 
     // 1️⃣ Check if status is provided
@@ -98,7 +70,7 @@ exports.updateMeetingStatus = async (req, res) => {
     const updatedMeeting = await MeetingBookingSchema.findByIdAndUpdate(
       id,
       { status },
-      { new: true, runValidators: true } // important
+      { new: true, runValidators: true }, // important
     );
 
     // 3️⃣ If meeting not found
@@ -108,15 +80,16 @@ exports.updateMeetingStatus = async (req, res) => {
       });
     }
 
-    res.status(200).json({
-      message: "Status updated successfully",
-      updatedMeeting,
-    });
-
+    sendSuccess(res, updatedMeeting);
   } catch (error) {
-    res.status(500).json({
-      message: "Server error",
-      error: error.message,
-    });
+    sendError(res, error);
   }
+};
+
+module.exports = {
+  MeetingBooking,
+  getMyMeetings,
+  getsinglemeeting,
+  getallmeetings,
+  updateMeetingStatus,
 };

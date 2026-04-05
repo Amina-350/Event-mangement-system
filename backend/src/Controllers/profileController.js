@@ -218,10 +218,10 @@ const createProfile = async (req, res) => {
       UserPreferenceTagModel.create(eventPreferencesData),
     ]);
 
-    res.status(201).json({ message: "Full profile created successfully" });
+    sendSuccess(res)
   } catch (error) {
     // console.error(error);
-    res.status(500).json({ message: "Server error", error: error.message });
+   sendError(res,error)
   }
 };
 

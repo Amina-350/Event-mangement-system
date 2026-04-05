@@ -1,27 +1,21 @@
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const User = require('../Model/UserModel');
-
+const User = require("../Model/UserModel");
+const { sendSuccess, sendError } = require("../utility/responseHandler");
 const JWT_SECRET = process.env.JWT_SECRET;
-
 exports.register = async (req, res) => {
   try {
     const {
-      name, email, password,
-      gender, role, phone, address, city, country
+      name,
+      email,
+      password,
+      gender,
+      role,
+      phone,
+      address,
+      city,
+      country,
     } = req.body;
-
-    // password match check
-    // if (password !== confirmPassword) {
-    //   return res.status(400).json({ message: "Passwords do not match" });
-    // }
-
-    // check existing user
-    // const existingUser = await User.findOne({ email });
-    // if (existingUser) {
-    //   return res.status(400).json({ message: "Email already registered" });
-    // }
-
     // hash password
     const hashedPassword = await bcrypt.hash(password, 10);
 
@@ -35,14 +29,13 @@ exports.register = async (req, res) => {
       phone,
       address,
       city,
-      country
+      country,
     });
 
-    res.status(201).json({ message: "User registered successfully" });
-
+    sendSuccess(res);
   } catch (err) {
     console.error(err);
-    res.status(500).json({ message: "Server error" });
+    sendError(res, err);
   }
 };
 exports.login = async (req, res) => {
@@ -69,7 +62,7 @@ exports.login = async (req, res) => {
     const token = jwt.sign(
       { userId: user._id, email: user.email, type: user.type },
       JWT_SECRET,
-      { expiresIn: "20h" }
+      { expiresIn: "20h" },
     );
 
     res.json({
@@ -78,44 +71,27 @@ exports.login = async (req, res) => {
       user: {
         name: user.name,
         email: user.email,
-        type: user.type
-      }
+        type: user.type,
+      },
     });
-
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: "Server error" });
+    sendError(res, err);
   }
 };
-exports.getalluser=async(req,res)=>{
-  try{
-    
-    const Alluser=await User.find();
-    res.status(200).json(Alluser)
-
+exports.getalluser = async (req, res) => {
+  try {
+    const Alluser = await User.find();
+    sendSuccess(res, Alluser);
+  } catch (error) {
+    sendError(res, error);
   }
-  catch(error){
-  res.status(500).json({
-      success: false,
-      message: "Server error",
-      error: error.message,
-  })
-
+};
+exports.getsingleuser = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const singleuser = await User.findById(id);
+    sendSuccess(res, singleuser);
+  } catch (error) {
+    sendError(res, error);
   }
-
-}
-exports.getsingleuser=async(req,res)=>{
-  try{
-const {id}=req.params;
-const singleuser=await User.findById(id);
-res.status(200).json(singleuser)
-  }
-  catch(error){
-    res.status(500).json({
-      message:"server error",
-      error:error.message,
-    })
-
-  }
-
-}
+};

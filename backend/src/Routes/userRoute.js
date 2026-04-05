@@ -1,11 +1,11 @@
 const express = require("express");
-const { register,login,getalluser ,getsingleuser} = require("../Controllers/userController");
+const { register,login,getalluser ,getsingleuser} = require("../Controllers/index");
 const router = express.Router();
-const authenticate=require('../Middleware/auth')
-
-router.post("/register",register);
-router.post("/login",login);
+const joiValidator=require('../Middleware/joiValidator');
+const {registerSchemaValidator,loginSchemaValidator}=require('../Validators/userValidator');
+const authenticate = require("../Middleware/auth");
+router.post("/register",joiValidator(registerSchemaValidator),register);
+router.post("/login",joiValidator(loginSchemaValidator),login);
 router.get('/getallusers',authenticate,getalluser);
 router.get('/getsingleuser/:id',authenticate,getsingleuser);
-
 module.exports = router;
