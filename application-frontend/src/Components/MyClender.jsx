@@ -3,7 +3,7 @@ import { Calendar, momentLocalizer } from "react-big-calendar";
 import moment from "moment";
 import api from "../api/axios";
 import "react-big-calendar/lib/css/react-big-calendar.css";
-import { Link, useParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 const localizer = momentLocalizer(moment);
 
 // ✅ Status Colors
@@ -63,7 +63,7 @@ console.log("the res isss0--->",res.data.meetings)
     fetchMeetings();
   }, []);
 
-console.log("the meeting id is--->",events)
+
   return (
    
     <div style={{ height: "650px", padding: "20px" }}>
@@ -105,8 +105,8 @@ Show All Meeting List
         }}
         popup
         // the style of the box
-        eventPropGetter={(event) => {
-          const color = STATUS_COLORS[event.status] || "#f2c9c9";
+        eventPropGetter={() => {
+        
           return {
             style: {
               backgroundColor: "#ffe5e5",

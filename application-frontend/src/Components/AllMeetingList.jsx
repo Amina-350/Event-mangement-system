@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React, { useEffect, useState } from "react";
 import axios from "../api/axios";
 
@@ -10,24 +11,28 @@ const columns = ["start", "pending", "on-going", "Finish", "draft"];
 export default function AllMeetingList() {
   const [meetings, setMeetings] = useState([]);
 
-  useEffect(() => {
-    fetchMeetings();
-  }, []);
+ 
 
+useEffect(() => {
   const fetchMeetings = async () => {
     const token = localStorage.getItem("token");
+
     const res = await axios.get("/Meeting/getallmeetings", {
       headers: {
         Authorization: `Bearer ${token}`,
       },
-    }); // your API
-    const formatted = res.data.map((m) => ({
+    });
+
+    const formatted = res.data.data.map((m) => ({
       ...m,
       status: m.status || "draft",
     }));
 
     setMeetings(formatted);
   };
+
+  fetchMeetings();
+}, []);
 
   const getMeetingsByStatus = (status) => {
     return meetings.filter((m) => m.status === status);
