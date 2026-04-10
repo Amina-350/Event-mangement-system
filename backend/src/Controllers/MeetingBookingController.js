@@ -1,12 +1,11 @@
-const mongoose = require("mongoose");
-const MeetingBookingSchema = require("../Model/MeetingBookingModel");
-const { sendSuccess, sendError } = require("../utility/responseHandler");
-const MeetingBooking = async (req, res) => {
+import {MeetingBookingSchemaModel} from "../Model/index.js";
+import { sendSuccess, sendError } from "../utility/index.js";
+export const MeetingBooking = async (req, res) => {
   try {
     const userId = req.user._id;
     const { EventId, Date, Time, Venue, OnlineMeetingLink, location, status } =
       req.body;
-    const NewMeeting = new MeetingBookingSchema({
+    const NewMeeting = new MeetingBookingSchemaModel({
       userId,
       EventId,
       Date,
@@ -22,11 +21,11 @@ const MeetingBooking = async (req, res) => {
     sendError(res, error);
   }
 };
-const getMyMeetings = async (req, res) => {
+export const getMyMeetings = async (req, res) => {
   try {
     const userId = req.user._id;
 
-    const meetings = await MeetingBookingSchema.find({ userId });
+    const meetings = await MeetingBookingSchemaModel.find({ userId });
 
     sendSuccess(res, meetings);
   } catch (error) {
@@ -34,27 +33,27 @@ const getMyMeetings = async (req, res) => {
   }
 };
 
-const getsinglemeeting = async (req, res) => {
+export const getsinglemeeting = async (req, res) => {
   try {
     const { id } = req.params;
 
-    const singlemeeting = await MeetingBookingSchema.findById(id);
+    const singlemeeting = await MeetingBookingSchemaModel.findById(id);
 
     sendSuccess(res, singlemeeting);
   } catch (error) {
     sendError(res, error);
   }
 };
-const getallmeetings = async (req, res) => {
+export const getallmeetings = async (req, res) => {
   try {
-    const Allmeetings = await MeetingBookingSchema.find();
+    const Allmeetings = await MeetingBookingSchemaModel.find();
     sendSuccess(res, Allmeetings);
   } catch (error) {
     sendError(res, error);
   }
 };
 // ----------------- patch api------------
-const updateMeetingStatus = async (req, res) => {
+export const updateMeetingStatus = async (req, res) => {
   try {
     const { id } = req.params; // meeting id
     const { status } = req.body; // new status
@@ -67,7 +66,7 @@ const updateMeetingStatus = async (req, res) => {
     }
 
     // 2️⃣ Update only status field
-    const updatedMeeting = await MeetingBookingSchema.findByIdAndUpdate(
+    const updatedMeeting = await MeetingBookingSchemaModel.findByIdAndUpdate(
       id,
       { status },
       { new: true, runValidators: true }, // important
@@ -86,10 +85,3 @@ const updateMeetingStatus = async (req, res) => {
   }
 };
 
-module.exports = {
-  MeetingBooking,
-  getMyMeetings,
-  getsinglemeeting,
-  getallmeetings,
-  updateMeetingStatus,
-};

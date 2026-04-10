@@ -1,6 +1,5 @@
-const Joi = require("joi");
-
-const createProfileSchemaValidator= Joi.object({
+import Joi from "joi";
+export const createProfileSchemaValidator= Joi.object({
   // 🔹 Personal Info
   firstName: Joi.string().min(2).max(50).allow('',null),
   middleName: Joi.string().allow('',null),
@@ -16,12 +15,7 @@ const createProfileSchemaValidator= Joi.object({
   languagesSpoken: Joi.array().items(Joi.string()).allow('',null),
 
   // 🔹 Social
-  socialLinks: Joi.array().items(
-    Joi.object({
-      platform: Joi.string().allow('',null),
-      url: Joi.string().uri().allow('',null),
-    })
-  ),
+  socialLinks:Joi.string().allow('',null),
 
   // 🔹 Privacy
   profileVisibility: Joi.string().allow('',null),
@@ -44,15 +38,15 @@ const createProfileSchemaValidator= Joi.object({
   certifications: Joi.array().items(Joi.string()).allow('',null),
 
   // 🔹 Event Profile
-  eventExpertise: Joi.array().items(Joi.string()).allow('',null),
-  preferredEventTypes: Joi.array().items(Joi.string()).allow('',null),
+  eventExpertise:Joi.string().allow('',null),
+  preferredEventTypes: Joi.string().allow('',null),
   preferredAudienceSize: Joi.string().allow('',null),
   availabilityStatus: Joi.string().allow('',null),
   favoriteVenues: Joi.array().items(Joi.string()).allow('',null),
 
   // 🔹 Preferences
   interests: Joi.array().items(Joi.string()).allow('',null),
-  notificationPreferences: Joi.object().allow('',null),
+  notificationPreferences: Joi.string().allow('',null),
   languagePreference: Joi.string().allow('',null),
   currencyPreference: Joi.string().allow('',null),
 
@@ -77,6 +71,3 @@ const createProfileSchemaValidator= Joi.object({
   brandEvents: Joi.boolean().allow('',null),
 });
 
-module.exports = {
-  createProfileSchemaValidator,
-};

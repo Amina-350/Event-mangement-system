@@ -1,27 +1,31 @@
-const { uploadToCloudinary } = require("../utility/cloudinary");
-const User = require("../Model/UserModel");
+import { sendError, sendSuccess, uploadToCloudinary } from "../utility/index.js";
+import {User} from "../Model/UserModel.js";
+
 // Import all models
-const PersonalIdentityModel = require("../Model/ProfileModels/PersonalIdentityModel");
-const ProfileSocialModel = require("../Model/ProfileModels/SocialLink");
-const PrivacyModel = require("../Model/ProfileModels/PrivacyModel");
-const ProfileAddressModel = require("../Model/ProfileModels/ProfileAddressModel");
-const RoleProfessionalInfoModel = require("../Model/ProfileModels/RoleAndProfessionalInfoModel");
-const EventProfileModel = require("../Model/ProfileModels/EventProfileModel");
-const UserPreferenceModel = require("../Model/ProfileModels/UserPreferenceModel");
-const AuditModel = require("../Model/ProfileModels/AuditModel");
-const ContactInformationModel = require("../Model/ProfileModels/ContactInformationModel");
-const VerficationTrustModel = require("../Model/ProfileModels/VerficationTrustModel");
-const UserPreferenceTagModel = require("../Model/ProfileModels/UserPreferencesTagModel");
-const createProfile = async (req, res) => {
+import {PersonalIdentityModelSchema} from "../Model/index.js";
+import {ProfileSocialModelSchema} from "../Model/index.js";
+import {PrivacyModelSchema} from "../Model/index.js";
+import {ProfileAddressModelSchema} from "../Model/index.js";
+import {RoleProfessionalInfoModelSchema} from "../Model/index.js";
+import {EventProfileModelSchema} from "../Model/index.js";
+import {UserPreferenceModelSchema} from "../Model/index.js";
+import {AuditModelSchema} from "../Model/index.js";
+import {ContactInformationModelSchema} from "../Model/index.js";
+import {VerficationTrustModelSchema} from "../Model/index.js";
+import {UserPreferenceTagModelSchema} from "../Model/index.js";
+export const createProfile = async (req, res) => {
   try {
     const userId = req.user._id;
     console.log("the id is ---->", userId);
 
     // Handle uploaded files
+    // eslint-disable-next-line no-console
     let profileImageUrl = "";
+    // eslint-disable-next-line no-console
     let coverImageUrl = "";
     if (req.files) {
       if (req.files.profileImage) {
+        // eslint-disable-next-line no-console
         profileImageUrl = await uploadToCloudinary(
           req.files.profileImage[0].path,
           "profiles",
@@ -108,6 +112,7 @@ const createProfile = async (req, res) => {
       dateOfBirth,
       nationality,
       languagesSpoken,
+      // eslint-disable-next-line no-console
       age: dateOfBirth
         ? Math.floor(
             (Date.now() - new Date(req.body.dateOfBirth).getTime()) /
@@ -205,17 +210,17 @@ const createProfile = async (req, res) => {
 
     // Save all models in parallels
     await Promise.all([
-      PersonalIdentityModel.create(personalIdentityData),
-      ProfileSocialModel.create(socialData),
-      PrivacyModel.create(privacyData),
-      ProfileAddressModel.create(addressData),
-      RoleProfessionalInfoModel.create(roleInfoData),
-      EventProfileModel.create(eventProfileData),
-      UserPreferenceModel.create(preferencesData),
-      AuditModel.create(auditData),
-      ContactInformationModel.create(contactData),
-      VerficationTrustModel.create(trustData),
-      UserPreferenceTagModel.create(eventPreferencesData),
+      PersonalIdentityModelSchema.create(personalIdentityData),
+      ProfileSocialModelSchema.create(socialData),
+      PrivacyModelSchema.create(privacyData),
+      ProfileAddressModelSchema.create(addressData),
+      RoleProfessionalInfoModelSchema.create(roleInfoData),
+      EventProfileModelSchema.create(eventProfileData),
+      UserPreferenceModelSchema.create(preferencesData),
+      AuditModelSchema.create(auditData),
+      ContactInformationModelSchema.create(contactData),
+      VerficationTrustModelSchema.create(trustData),
+      UserPreferenceTagModelSchema.create(eventPreferencesData),
     ]);
 
     sendSuccess(res)
@@ -225,4 +230,4 @@ const createProfile = async (req, res) => {
   }
 };
 
-module.exports = { createProfile: createProfile };
+

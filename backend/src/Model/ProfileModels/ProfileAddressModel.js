@@ -1,6 +1,4 @@
-  
-  
-  const mongoose = require("mongoose");
+import mongoose from "mongoose";
   
   const ProfileAddressModel = new mongoose.Schema({
      userId: {
@@ -35,4 +33,4 @@
   }
 });
 
-module.exports = mongoose.model("ProfileAddressModel", ProfileAddressModel);
+export const ProfileAddressModelSchema= mongoose.model("ProfileAddressModel", ProfileAddressModel);

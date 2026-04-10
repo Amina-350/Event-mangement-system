@@ -1,6 +1,6 @@
-const Joi = require("joi");
+import Joi from "joi";
 // 🔹 REGISTER VALIDATOR
-const registerSchemaValidator = Joi.object({
+export const registerSchemaValidator = Joi.object({
   name: Joi.string().allow("", null),
   email: Joi.string().email(),
   password: Joi.string().min(8),
@@ -15,13 +15,9 @@ const registerSchemaValidator = Joi.object({
 });
 
 // 🔹 LOGIN VALIDATOR
-const loginSchemaValidator = Joi.object({
+export const loginSchemaValidator = Joi.object({
   email: Joi.string().email().required(),
 
   password: Joi.string().required(),
 });
 
-module.exports = {
-  registerSchemaValidator,
-  loginSchemaValidator,
-};

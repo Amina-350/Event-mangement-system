@@ -1,6 +1,5 @@
-module.exports = {
-  ...require('./EventController'),
-  ...require('./MeetingBookingController'),
-  ...require('./profileController'),
-  ...require('./userController'),
-};
+
+export * from './EventController.js';
+export * from './MeetingBookingController.js';
+export * from './profileController.js';
+export * from './userController.js';

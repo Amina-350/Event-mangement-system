@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 const PersonalIdentityModel = new mongoose.Schema(
   {
     // =====================================================
@@ -38,4 +38,4 @@ const PersonalIdentityModel = new mongoose.Schema(
   },
 );
 
-module.exports = mongoose.model("PersonalIdentityModel", PersonalIdentityModel);
+export const PersonalIdentityModelSchema= mongoose.model("PersonalIdentityModel", PersonalIdentityModel);

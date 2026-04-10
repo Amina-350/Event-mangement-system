@@ -1,7 +1,8 @@
+/* eslint-disable */
 require("dotenv").config();
 const mysql = require("mysql2/promise");
 
-const pool = mysql.createPool({
+export const pool = mysql.createPool({
   host: process.env.DB_HOST,
   user: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
@@ -10,7 +11,7 @@ const pool = mysql.createPool({
   connectionLimit: 10,
 });
 
-async function connectDB() {
+export async function connectDB() {
   try {
     const connection = await pool.getConnection();
     console.log("MySQL connected successfully");
@@ -18,7 +19,5 @@ async function connectDB() {
   } catch (error) {
     console.error("MySQL connection failed:", error);
     process.exit(1);
-  }
-}
+  }}
 
-module.exports = { pool, connectDB };

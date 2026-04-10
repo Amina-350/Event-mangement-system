@@ -1,14 +1,17 @@
-  const express = require("express");
-  const router = express.Router();
-  const authenticate = require("../Middleware/auth");
-  const upload = require("../utility/multer");
-  const {createEventValidator}=require('../Validators/EventValidator');
-  const {
-    createEventController,
-    getallevents,
-    getsingleevent,
-  } = require("../Controllers/EventController");
-const joiValidator = require("../Middleware/joiValidator");
+import express from "express";
+const router = express.Router();
+
+import {authenticate} from "../Middleware/index.js";
+import {upload} from "../utility/index.js";
+import { createEventValidator } from "../Validators/index.js";
+
+import {
+  createEventController,
+  getallevents,
+  getsingleevent
+} from "../Controllers/index.js";
+
+import {joiValidator} from "../Middleware/index.js";
   router.post(
     "/createEvent",
     authenticate,
@@ -18,4 +21,4 @@ const joiValidator = require("../Middleware/joiValidator");
   );
   router.get("/AllEvents", authenticate,getallevents);
   router.get('/GetSingleEvent/:id',authenticate,getsingleevent);
-  module.exports = router;
+export default router;

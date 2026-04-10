@@ -1,13 +1,15 @@
-const express = require("express");
+import express from "express";
 const app = express();
-const { connectDB } = require("./utility/dbConnection");
-// const {connectDB}=require('./utility/dbMySqlConnection')
-const userRouter = require("./Routes/userRoute");
-const ProfileRouter = require("./Routes/profileRoute");
-const EventRoute=require('./Routes/EventRoute');
-const BookMeetingRoute=require('./Routes/BookMeetingRoute')
-const cors = require("cors");
 
+import {connectDB} from "./utility/index.js";
+// import { connectDB } from "./utility/dbMySqlConnection.js";
+
+import userRouter from "./Routes/userRoute.js";
+import ProfileRouter from "./Routes/profileRoute.js";
+import EventRoute from "./Routes/EventRoute.js";
+import BookMeetingRoute from "./Routes/BookMeetingRoute.js";
+
+import cors from "cors";
 
 // ✅ CORS FIRST
 app.use(cors()); // this handles preflight automatically
@@ -24,4 +26,4 @@ app.use("/api/user", userRouter);
 app.use("/api/Profile", ProfileRouter);
 app.use('/api/Event',EventRoute)
 app.use('/api/Meeting',BookMeetingRoute);
-module.exports = app;
+export default app;

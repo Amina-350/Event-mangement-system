@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+import mongoose from "mongoose";
 
 const UserPreferenceTagModel = new mongoose.Schema({
   userId: {
@@ -27,4 +27,4 @@ const UserPreferenceTagModel = new mongoose.Schema({
   }
 });
 
-module.exports = mongoose.model('UserPreferenceTagModel', UserPreferenceTagModel);
+export const UserPreferenceTagModelSchema= mongoose.model('UserPreferenceTagModel', UserPreferenceTagModel);

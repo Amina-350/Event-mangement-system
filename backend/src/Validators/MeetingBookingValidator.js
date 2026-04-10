@@ -1,7 +1,7 @@
-const Joi = require("joi");
+import Joi from "joi";
 
 // 🔹 CREATE MEETING VALIDATOR
-const meetingBookingValidator= Joi.object({
+export const meetingBookingValidator= Joi.object({
   EventId: Joi.string(), 
   Date: Joi.date(),
   Time: Joi.string(), 
@@ -13,7 +13,3 @@ const meetingBookingValidator= Joi.object({
 })
 
 
-module.exports = {
-  meetingBookingValidator,
-
-};

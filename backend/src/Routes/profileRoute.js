@@ -1,10 +1,11 @@
-const express = require("express");
-const { createProfile } = require("../Controllers/profileController");
-const authenticate = require("../Middleware/auth");
-const upload = require("../utility/multer");
-const joiValidator = require("../Middleware/joiValidator");
-const {createProfileSchemaValidator}=require('../Validators/ProfileValidator');
+import express from "express";
 const router = express.Router();
+
+import { createProfile } from "../Controllers/index.js";
+import {authenticate} from "../Middleware/auth.js";
+import {upload} from "../utility/index.js";
+import {joiValidator} from "../Middleware/index.js";
+import { createProfileSchemaValidator } from "../Validators/index.js";
 router.post(
   "/createProfile",
   authenticate,
@@ -16,4 +17,4 @@ router.post(
   createProfile
 );
 
-module.exports = router;
+export default router;

@@ -1,5 +1,7 @@
-const cloudinary = require("cloudinary").v2;
-require("dotenv").config();
+/* eslint-disable */
+import { v2 as cloudinary } from "cloudinary";
+import dotenv from "dotenv";
+dotenv.config();
 
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
@@ -7,7 +9,7 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
-const uploadToCloudinary = async (filePath, folder = "profiles") => {
+export const uploadToCloudinary = async (filePath, folder = "profiles") => {
   try {
     const result = await cloudinary.uploader.upload(filePath, { folder });
     return result.secure_url; // returns the URL of uploaded image
@@ -16,4 +18,4 @@ const uploadToCloudinary = async (filePath, folder = "profiles") => {
   }
 };
 
-module.exports = { cloudinary, uploadToCloudinary };
+

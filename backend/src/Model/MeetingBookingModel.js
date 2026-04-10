@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 const MeetingBookingSchema = new mongoose.Schema({
   userId: {
     type: mongoose.Schema.Types.ObjectId,
@@ -32,4 +32,4 @@ const MeetingBookingSchema = new mongoose.Schema({
     default:"start"
   }
 });
-module.exports = mongoose.model("MeetingBookingSchema", MeetingBookingSchema);
+export const MeetingBookingSchemaModel= mongoose.model("MeetingBookingSchema", MeetingBookingSchema);

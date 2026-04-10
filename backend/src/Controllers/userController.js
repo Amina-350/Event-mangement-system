@@ -1,9 +1,10 @@
-const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken");
-const User = require("../Model/UserModel");
-const { sendSuccess, sendError } = require("../utility/responseHandler");
-const JWT_SECRET = process.env.JWT_SECRET;
-exports.register = async (req, res) => {
+import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
+import {User} from "../Model/UserModel.js";
+import { sendSuccess, sendError } from "../utility/index.js";
+// eslint-disable-next-line no-console
+const JWT_SECRET = process.env.JWT_SECRET;// eslint-disable-next-line no-console
+export const register = async (req, res) => {
   try {
     const {
       name,
@@ -38,7 +39,7 @@ exports.register = async (req, res) => {
     sendError(res, err);
   }
 };
-exports.login = async (req, res) => {
+export const login = async (req, res) => {
   try {
     const { email, password } = req.body;
 
@@ -78,7 +79,7 @@ exports.login = async (req, res) => {
     sendError(res, err);
   }
 };
-exports.getalluser = async (req, res) => {
+export const getalluser = async (req, res) => {
   try {
     const Alluser = await User.find();
     sendSuccess(res, Alluser);
@@ -86,7 +87,7 @@ exports.getalluser = async (req, res) => {
     sendError(res, error);
   }
 };
-exports.getsingleuser = async (req, res) => {
+export const getsingleuser = async (req, res) => {
   try {
     const { id } = req.params;
     const singleuser = await User.findById(id);

@@ -1,5 +1,5 @@
 
-  const mongoose = require("mongoose");
+import mongoose from "mongoose";
   const RoleProfessionalInfoModel=new mongoose.Schema({
      userId: {
         type: mongoose.Schema.Types.ObjectId,
@@ -38,4 +38,4 @@
     updatedAt: "profileUpdatedAt"
   }
 })
-  module.exports=mongoose.model('RoleProfessionalInfoModel',RoleProfessionalInfoModel)
+export const RoleProfessionalInfoModelSchema= mongoose.model('RoleProfessionalInfoModel',RoleProfessionalInfoModel)

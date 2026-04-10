@@ -1,4 +1,4 @@
-const mongoose=require('mongoose');
+import mongoose from "mongoose";
 const AuditModel=new mongoose.Schema({
    userId: {
       type: mongoose.Schema.Types.ObjectId,
@@ -22,4 +22,4 @@ const AuditModel=new mongoose.Schema({
   }
 }
 )
-module.exports=mongoose.model('AuditModel',AuditModel)
+export const AuditModelSchema= mongoose.model('AuditModel',AuditModel)

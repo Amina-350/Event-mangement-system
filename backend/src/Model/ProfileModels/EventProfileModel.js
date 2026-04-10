@@ -1,4 +1,4 @@
-const mongoose=require('mongoose');
+import mongoose from "mongoose";
 const EventProfileModel=new mongoose.Schema({
      userId: {
         type: mongoose.Schema.Types.ObjectId,
@@ -39,4 +39,4 @@ const EventProfileModel=new mongoose.Schema({
     updatedAt: "profileUpdatedAt"
   }
 })
-module.exports=mongoose.model('EventProfileModel',EventProfileModel)
+export const EventProfileModelSchema= mongoose.model('EventProfileModel',EventProfileModel)

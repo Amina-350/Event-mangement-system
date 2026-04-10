@@ -1,4 +1,4 @@
-const mongoose=require('mongoose');
+import mongoose from "mongoose";
 const VerficationTrustModel=new mongoose.Schema({
      userId: {
         type: mongoose.Schema.Types.ObjectId,
@@ -29,4 +29,4 @@ const VerficationTrustModel=new mongoose.Schema({
     updatedAt: "profileUpdatedAt"
   }
 })
-module.exports=mongoose.model('VerficationTrustModel',VerficationTrustModel)
+export const VerficationTrustModelSchema= mongoose.model('VerficationTrustModel',VerficationTrustModel)

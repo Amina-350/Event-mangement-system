@@ -1,10 +1,10 @@
-const Event = require("../Model/EventModel");
-const User = require("../Model/UserModel");
-const { uploadToCloudinary } = require("../utility/cloudinary");
-const mongoose = require("mongoose");
-const UserPreferenceTagModel = require("../Model/ProfileModels/UserPreferencesTagModel");
-const {sendSuccess,sendError}=require('../utility/responseHandler');
-const createEventController = async (req, res) => {
+import {Event} from "../Model/index.js";
+import {User} from "../Model/index.js";
+import { uploadToCloudinary } from "../utility/index.js";
+import mongoose from "mongoose";
+import { sendSuccess, sendError } from "../utility/index.js";
+
+export const createEventController = async (req, res) => {
   try {
     const userId = req.user._id;
     const user = await User.findById(userId);
@@ -73,7 +73,7 @@ const createEventController = async (req, res) => {
   }
 }
 
-const getsingleevent = async (req, res) => {
+export const getsingleevent = async (req, res) => {
   try {
     const { id } = req.params;
     // ✅ Check if ID is valid
@@ -93,7 +93,7 @@ const getsingleevent = async (req, res) => {
     sendError(res,error,"server error")
   }
 };
-const getallevents = async (req, res) => {
+export const getallevents = async (req, res) => {
   try {
     // Get page from query (default = 1)
     const page = parseInt(req.query.page) || 1;
@@ -128,8 +128,3 @@ const getallevents = async (req, res) => {
     });
   }
 };
-module.exports= {
-  createEventController,
-  getsingleevent,
-  getallevents,
-}

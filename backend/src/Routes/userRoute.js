@@ -1,11 +1,11 @@
-const express = require("express");
-const { register,login,getalluser ,getsingleuser} = require("../Controllers/index");
+import express from "express";
 const router = express.Router();
-const joiValidator=require('../Middleware/joiValidator');
-const {registerSchemaValidator,loginSchemaValidator}=require('../Validators/userValidator');
-const authenticate = require("../Middleware/auth");
+import { register, login, getalluser, getsingleuser } from "../Controllers/index.js";
+import {joiValidator} from "../Middleware/index.js";
+import { registerSchemaValidator, loginSchemaValidator } from "../Validators/index.js";
+import {authenticate} from "../Middleware/index.js";
 router.post("/register",joiValidator(registerSchemaValidator),register);
 router.post("/login",joiValidator(loginSchemaValidator),login);
 router.get('/getallusers',authenticate,getalluser);
 router.get('/getsingleuser/:id',authenticate,getsingleuser);
-module.exports = router;
+export default router;

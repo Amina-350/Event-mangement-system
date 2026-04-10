@@ -1,7 +1,8 @@
-const jwt = require("jsonwebtoken");
-const JWT_SECRET = process.env.JWT_SECRET;
+import jwt from "jsonwebtoken";
+// eslint-disable-next-line no-console
+const JWT_SECRET = process.env.JWT_SECRET;// eslint-disable-next-line no-console
 
-const authenticate = (req, res, next) => {
+export const authenticate = (req, res, next) => {
   try {
     const authHeader = req.headers["authorization"];
     if (!authHeader) return res.status(401).json({ message: "No token provided" });
@@ -18,9 +19,11 @@ const authenticate = (req, res, next) => {
       // type: decoded.type
     };
     next();
-  } catch (error) {
+    
+  }
+  // eslint-disable-next-line no-console 
+  catch (error) {
     return res.status(401).json({ message: "Unauthorized" });
   }
 };
 
-module.exports = authenticate;

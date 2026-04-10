@@ -1,9 +1,12 @@
-require("dotenv").config();
-const mongoose = require("mongoose");
+/* eslint-disable */
+import dotenv from "dotenv";
+dotenv.config();
+
+import mongoose from "mongoose";
 
 const MONGO_URI = process.env.MONGO_URI;
 
-async function connectDB() {
+export async function connectDB() {
   try {
     await mongoose.connect(MONGO_URI);
 
@@ -13,5 +16,3 @@ async function connectDB() {
     process.exit(1);
   }
 }
-
-module.exports = { connectDB };

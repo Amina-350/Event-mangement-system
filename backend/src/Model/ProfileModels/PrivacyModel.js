@@ -1,4 +1,4 @@
-const mongoose=require('mongoose');
+import mongoose from "mongoose";
 const PrivacyModel=new mongoose.Schema({
   
      userId: {
@@ -32,4 +32,4 @@ const PrivacyModel=new mongoose.Schema({
     updatedAt: "profileUpdatedAt"
   }
 })
-module.exports=mongoose.model('PrivacyModel',PrivacyModel)
+export const PrivacyModelSchema= mongoose.model('PrivacyModel',PrivacyModel)

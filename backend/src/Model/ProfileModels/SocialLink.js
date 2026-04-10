@@ -1,6 +1,5 @@
   
-  
-  const mongoose = require("mongoose");
+  import mongoose from "mongoose";
   
   const ProfileSocialModel = new mongoose.Schema({
      userId: {
@@ -29,4 +28,4 @@
   }
 });
 
-module.exports = mongoose.model("ProfileSocialModel", ProfileSocialModel);
+export const ProfileSocialModelSchema= mongoose.model("ProfileSocialModel", ProfileSocialModel);

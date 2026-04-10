@@ -1,4 +1,4 @@
-const mongoose=require('mongoose');
+import mongoose from "mongoose";
 const UserPreferenceModel=new mongoose.Schema({
      userId: {
         type: mongoose.Schema.Types.ObjectId,
@@ -30,4 +30,4 @@ const UserPreferenceModel=new mongoose.Schema({
     updatedAt: "profileUpdatedAt"
   }
 })
-module.exports=mongoose.model('UserPreferenceModel',UserPreferenceModel)
+export const UserPreferenceModelSchema= mongoose.model('UserPreferenceModel',UserPreferenceModel)

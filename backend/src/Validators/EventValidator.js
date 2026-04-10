@@ -1,7 +1,7 @@
-const Joi = require("joi");
+import Joi from "joi";
 
 // 🔹 CREATE EVENT VALIDATOR
-const createEventValidator= Joi.object({
+export const createEventValidator= Joi.object({
   title: Joi.string().min(3).max(100).allow('', null),
 
   description: Joi.string().min(10).allow('', null),
@@ -38,6 +38,3 @@ tags:Joi.any().allow('', null),
 
   endDateTime: Joi.date().greater(Joi.ref("startDateTime")).allow('', null),
 });
-module.exports = {
-  createEventValidator,
-};

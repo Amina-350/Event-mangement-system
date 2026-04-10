@@ -1,5 +1,5 @@
-const joiValidator = (schema) => (req, res, next) => {
-  const { error } = schema.validate(req.body);
+export const joiValidator = (schema) => (req, res, next) => {
+const { error } = schema.validate(req.body);
 
   if (error) {
     return res.status(400).json({
@@ -10,4 +10,3 @@ const joiValidator = (schema) => (req, res, next) => {
   next();
 };
 
-module.exports = joiValidator;
